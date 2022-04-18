@@ -49,7 +49,7 @@ namespace StackExchange.Redis
         private long nonPreferredEndpointCount;
 
         //private volatile int missedHeartbeats;
-        private long operationCount, socketCount;
+        private long operationCount, socketCount, movedResponseCount;
         private volatile PhysicalConnection? physical;
 
         private long profileLastLog;
@@ -105,6 +105,8 @@ namespace StackExchange.Redis
 
         internal State ConnectionState => (State)state;
         internal bool IsBeating => Interlocked.CompareExchange(ref beating, 0, 0) == 1;
+
+        internal long MovedResponseCount => Interlocked.Read(ref movedResponseCount);
 
         internal long OperationCount => Interlocked.Read(ref operationCount);
 
@@ -255,6 +257,7 @@ namespace StackExchange.Redis
             counters.SocketCount = Interlocked.Read(ref socketCount);
             counters.WriterCount = Interlocked.CompareExchange(ref activeWriters, 0, 0);
             counters.NonPreferredEndpointCount = Interlocked.Read(ref nonPreferredEndpointCount);
+            counters.MovedResponseCount = MovedResponseCount;
             physical?.GetCounters(counters);
         }
 
@@ -328,10 +331,10 @@ namespace StackExchange.Redis
             return sb.ToString();
         }
 
-        internal void IncrementOpCount()
-        {
-            Interlocked.Increment(ref operationCount);
-        }
+        internal void IncrementMovedResponseCount() => Interlocked.Increment(ref movedResponseCount);
+
+        internal void IncrementOpCount() => Interlocked.Increment(ref operationCount);
+
 
         internal void KeepAlive()
         {

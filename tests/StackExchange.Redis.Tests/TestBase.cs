@@ -159,12 +159,31 @@ public abstract class TestBase : IDisposable
         }
     }
 
+<<<<<<< Updated upstream
     private int privateFailCount;
     private static readonly AsyncLocal<int> sharedFailCount = new AsyncLocal<int>();
     private volatile int expectedFailCount;
 
     private readonly List<string> privateExceptions = new List<string>();
     private static readonly List<string> backgroundExceptions = new List<string>();
+=======
+        protected void OnHashSlotMoved(object? sender, HashSlotMovedEventArgs e)
+        {
+            Interlocked.Increment(ref privateMoveCount);
+            lock (privateMoves)
+            {
+                privateMoves.Add($"{Time()}: Move: {e.HashSlot}, from: {e.OldEndPoint} to: {e.NewEndPoint}");
+            }
+        }
+
+        private int privateFailCount, privateMoveCount;
+        private volatile int expectedFailCount, expectedMoveCount;
+        private static readonly AsyncLocal<int> sharedFailCount = new AsyncLocal<int>();
+
+        private readonly List<string> privateExceptions = new List<string>();
+        private static readonly List<string> backgroundExceptions = new List<string>();
+        private readonly List<string> privateMoves = new List<string>();
+>>>>>>> Stashed changes
 
     public void ClearAmbientFailures()
     {
@@ -234,12 +253,57 @@ public abstract class TestBase : IDisposable
         return result;
     }
 
+<<<<<<< Updated upstream
     protected static IServer GetAnyPrimary(IConnectionMultiplexer muxer)
     {
         foreach (var endpoint in muxer.GetEndPoints())
         {
             var server = muxer.GetServer(endpoint);
             if (!server.IsReplica) return server;
+=======
+        public void SetExpectedMoveCount(int count)
+        {
+            expectedMoveCount = count;
+        }
+
+        public void Teardown()
+        {
+            int sharedFails;
+            lock (sharedFailCount)
+            {
+                sharedFails = sharedFailCount.Value;
+                sharedFailCount.Value = 0;
+            }
+            if (expectedFailCount >= 0 && (sharedFails + privateFailCount) != expectedFailCount)
+            {
+                lock (privateExceptions)
+                {
+                    foreach (var item in privateExceptions.Take(5))
+                    {
+                        LogNoTime(item);
+                    }
+                }
+                lock (backgroundExceptions)
+                {
+                    foreach (var item in backgroundExceptions.Take(5))
+                    {
+                        LogNoTime(item);
+                    }
+                }
+                Skip.Inconclusive($"There were {privateFailCount} private and {sharedFailCount.Value} ambient exceptions; expected {expectedFailCount}.");
+            }
+            if (privateMoveCount >= 0 && privateMoveCount != expectedMoveCount)
+            {
+                foreach (var item in privateMoves.Take(10))
+                {
+                    LogNoTime(item);
+                }
+                throw new Exception("Unexpected moves encountered: " + privateMoveCount);
+            }
+
+            var pool = SocketManager.Shared?.SchedulerPool;
+            Log($"Service Counts: (Scheduler) Queue: {pool?.TotalServicedByQueue.ToString()}, Pool: {pool?.TotalServicedByPool.ToString()}, Workers: {pool?.WorkerCount.ToString()}, Available: {pool?.AvailableCount.ToString()}");
+>>>>>>> Stashed changes
         }
         throw new InvalidOperationException("Requires a primary endpoint (found none)");
     }
@@ -330,8 +394,34 @@ public abstract class TestBase : IDisposable
         {
             throw new SkipTestException($"Requires server version {requiredVersion}, but server is only {serverVersion}.")
             {
+<<<<<<< Updated upstream
                 MissingFeatures = $"Server version >= {requiredVersion}."
             };
+=======
+                configuration = GetConfiguration();
+                if (configuration == _fixture.Configuration)
+                {   // only if the
+                    return _fixture.Connection;
+                }
+            }
+
+            var muxer = CreateDefault(
+                Writer,
+                configuration ?? GetConfiguration(),
+                clientName, syncTimeout, allowAdmin, keepAlive,
+                connectTimeout, password, tieBreaker, log,
+                fail, disabledCommands, enabledCommands,
+                checkConnect, failMessage,
+                channelPrefix, proxy,
+                logTransactionData, defaultDatabase,
+                backlogPolicy,
+                caller);
+            muxer.InternalError += OnInternalError;
+            muxer.ConnectionFailed += OnConnectionFailed;
+            muxer.ConnectionRestored += (s, e) => Log($"Connection Restored ({e.ConnectionType},{e.FailureType}): {e.Exception}");
+            muxer.HashSlotMoved += OnHashSlotMoved;
+            return muxer;
+>>>>>>> Stashed changes
         }
     }
 

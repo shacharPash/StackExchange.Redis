@@ -38,6 +38,11 @@ namespace StackExchange.Redis
         public bool IsEmpty => PendingUnsentItems == 0 && SentItemsAwaitingResponse == 0 && ResponsesAwaitingAsyncCompletion == 0 && FailedAsynchronously == 0;
 
         /// <summary>
+        /// Count of MOVED responses a connection has received.
+        /// </summary>
+        internal long MovedResponseCount { get; set; }
+
+        /// <summary>
         /// Indicates the total number of messages dispatched to a non-preferred endpoint, for example sent
         /// to a primary when the caller stated a preference of replica.
         /// </summary>
@@ -99,6 +104,7 @@ namespace StackExchange.Redis
             CompletedAsynchronously += other.CompletedAsynchronously;
             CompletedSynchronously += other.CompletedSynchronously;
             FailedAsynchronously += other.FailedAsynchronously;
+            MovedResponseCount += other.MovedResponseCount;
             NonPreferredEndpointCount += other.NonPreferredEndpointCount;
             OperationCount += other.OperationCount;
             PendingUnsentItems += other.PendingUnsentItems;
@@ -113,6 +119,7 @@ namespace StackExchange.Redis
             CompletedAsynchronously != 0
             || CompletedSynchronously != 0
             || FailedAsynchronously != 0
+            || MovedResponseCount != 0
             || NonPreferredEndpointCount != 0
             || OperationCount != 0
             || PendingUnsentItems != 0
@@ -124,6 +131,7 @@ namespace StackExchange.Redis
 
         internal void Append(StringBuilder sb)
         {
+            // TODO: Append mv= if keeping this
             sb.Append("ops=").Append(OperationCount).Append(", qu=").Append(PendingUnsentItems)
                 .Append(", qs=").Append(SentItemsAwaitingResponse).Append(", qc=").Append(ResponsesAwaitingAsyncCompletion)
                 .Append(", wr=").Append(WriterCount);

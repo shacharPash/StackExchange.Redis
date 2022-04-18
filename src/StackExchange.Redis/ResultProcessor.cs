@@ -220,6 +220,11 @@ namespace StackExchange.Redis
                 if (isMoved || result.StartsWith(CommonReplies.ASK))
                 {
                     message.SetResponseReceived();
+                    // Record that we have a MOVED response, regardless of whether we do anyting with it.
+                    if (isMoved)
+                    {
+                        bridge?.IncrementMovedResponseCount();
+                    }
 
                     log = false;
                     string[] parts = result.GetString()!.Split(StringSplits.Space, 3);
