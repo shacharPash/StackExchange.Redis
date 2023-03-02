@@ -142,6 +142,11 @@ namespace StackExchange.Redis.Configuration
         public virtual TimeSpan KeepAliveInterval => TimeSpan.FromSeconds(60);
 
         /// <summary>
+        /// Which Resp protocol to use (default is RESP 2).
+        /// </summary>
+        public virtual string Protocol => "2";
+
+        /// <summary>
         /// Type of proxy to use (if any); for example <see cref="Proxy.Twemproxy"/>.
         /// </summary>
         public virtual Proxy Proxy => Proxy.None;

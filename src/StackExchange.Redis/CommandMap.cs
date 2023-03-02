@@ -7,7 +7,7 @@ namespace StackExchange.Redis
     /// <summary>
     /// Represents the commands mapped on a particular configuration.
     /// </summary>
-    public sealed class CommandMap
+    public sealed class CommandMap // TODO: (RESP3) add HELLO command here?
     {
         private readonly CommandBytes[] map;
 
