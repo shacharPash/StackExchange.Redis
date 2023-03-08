@@ -111,7 +111,7 @@ namespace StackExchange.Redis
         public string Configuration => RawConfig.ToString();
 
         /// <summary>
-        /// Gets the configuration of the connection.
+        /// Gets the RESP protocol in use.
         /// </summary>
         public string Protocol => RawConfig.Protocol;
 

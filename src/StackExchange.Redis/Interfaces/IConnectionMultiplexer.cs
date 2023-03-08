@@ -35,6 +35,11 @@ namespace StackExchange.Redis
         string Configuration { get; }
 
         /// <summary>
+        /// Gets the RESP protocol in use.
+        /// </summary>
+        public string Protocol { get; }
+
+        /// <summary>
         /// Gets the timeout associated with the connections.
         /// </summary>
         int TimeoutMilliseconds { get; }

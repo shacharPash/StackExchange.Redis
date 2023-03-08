@@ -59,6 +59,8 @@ public class SharedConnectionFixture : IDisposable
 
         public string Configuration => _inner.Configuration;
 
+        public string Protocol => _inner.Protocol;
+
         public int TimeoutMilliseconds => _inner.TimeoutMilliseconds;
 
         public long OperationCount => _inner.OperationCount;
