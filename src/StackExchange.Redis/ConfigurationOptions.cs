@@ -85,6 +85,7 @@ namespace StackExchange.Redis
                 User = "user",
                 Password = "password",
                 PreserveAsyncOrder = "preserveAsyncOrder",
+                Protocol = "protocol",
                 Proxy = "proxy",
                 ResolveDns = "resolveDns",
                 ResponseTimeout = "responseTimeout",
@@ -116,6 +117,7 @@ namespace StackExchange.Redis
                 User,
                 Password,
                 PreserveAsyncOrder,
+                Protocol,
                 Proxy,
                 ResolveDns,
                 ServiceName,
@@ -144,7 +146,7 @@ namespace StackExchange.Redis
         private bool? allowAdmin, abortOnConnectFail, resolveDns, ssl, checkCertificateRevocation,
                       includeDetailInExceptions, includePerformanceCountersInExceptions;
 
-        private string? tieBreaker, sslHost, configChannel;
+        private string? tieBreaker, sslHost, configChannel, protocol;
 
         private TimeSpan? heartbeatInterval;
 
@@ -450,6 +452,15 @@ namespace StackExchange.Redis
         }
 
         /// <summary>
+        /// Which Resp protocol to use (default is RESP 2).
+        /// </summary>
+        public string Protocol
+        {
+            get => protocol ?? Defaults.Protocol;
+            set => protocol = value;
+        }
+
+        /// <summary>
         /// Type of proxy to use (if any); for example <see cref="Proxy.Twemproxy"/>.
         /// </summary>
         public Proxy Proxy
@@ -632,6 +643,7 @@ namespace StackExchange.Redis
             configChannel = configChannel,
             abortOnConnectFail = abortOnConnectFail,
             resolveDns = resolveDns,
+            protocol = protocol,
             proxy = proxy,
             commandMap = commandMap,
             CertificateValidationCallback = CertificateValidationCallback,
@@ -727,6 +739,7 @@ namespace StackExchange.Redis
             Append(sb, OptionKeys.ResolveDns, resolveDns);
             Append(sb, OptionKeys.ChannelPrefix, (string?)ChannelPrefix);
             Append(sb, OptionKeys.ConnectRetry, connectRetry);
+            Append(sb, OptionKeys.Protocol, protocol);
             Append(sb, OptionKeys.Proxy, proxy);
             Append(sb, OptionKeys.ConfigCheckSeconds, configCheckSeconds);
             Append(sb, OptionKeys.ResponseTimeout, responseTimeout);
@@ -873,6 +886,9 @@ namespace StackExchange.Redis
                             break;
                         case OptionKeys.SslHost:
                             SslHost = value;
+                            break;
+                        case OptionKeys.Protocol:
+                            Protocol = value;
                             break;
                         case OptionKeys.Proxy:
                             Proxy = OptionKeys.ParseProxy(key, value);

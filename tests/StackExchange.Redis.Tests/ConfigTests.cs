@@ -459,6 +459,20 @@ public class ConfigTests : TestBase
     }
 
     [Fact]
+    public void Resp3Test()
+    {
+        var config = new ConfigurationOptions
+        {
+            Protocol = "3"
+        };
+
+        var conn = ConnectionMultiplexer.Connect(config);
+        var db = conn.GetDatabase();
+        db.Ping();
+        db.Ping();
+    }
+
+    [Fact]
     public void DefaultThreadPoolManagerIsDetected()
     {
         var config = new ConfigurationOptions

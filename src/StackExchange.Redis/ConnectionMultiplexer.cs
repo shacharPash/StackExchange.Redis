@@ -111,6 +111,11 @@ namespace StackExchange.Redis
         public string Configuration => RawConfig.ToString();
 
         /// <summary>
+        /// Gets the RESP protocol in use.
+        /// </summary>
+        public string Protocol => RawConfig.Protocol;
+
+        /// <summary>
         /// Indicates whether any servers are connected.
         /// </summary>
         public bool IsConnected => _serverSnapshot.Any(static s => s.IsConnected);

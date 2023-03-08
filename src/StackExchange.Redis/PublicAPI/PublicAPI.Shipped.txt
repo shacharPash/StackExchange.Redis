@@ -242,6 +242,8 @@ StackExchange.Redis.ConfigurationOptions.Password.get -> string?
 StackExchange.Redis.ConfigurationOptions.Password.set -> void
 StackExchange.Redis.ConfigurationOptions.PreserveAsyncOrder.get -> bool
 StackExchange.Redis.ConfigurationOptions.PreserveAsyncOrder.set -> void
+StackExchange.Redis.ConfigurationOptions.Protocol.get -> string!
+StackExchange.Redis.ConfigurationOptions.Protocol.set -> void
 StackExchange.Redis.ConfigurationOptions.Proxy.get -> StackExchange.Redis.Proxy
 StackExchange.Redis.ConfigurationOptions.Proxy.set -> void
 StackExchange.Redis.ConfigurationOptions.ReconnectRetryPolicy.get -> StackExchange.Redis.IReconnectRetryPolicy!
@@ -349,6 +351,7 @@ StackExchange.Redis.ConnectionMultiplexer.IsConnecting.get -> bool
 StackExchange.Redis.ConnectionMultiplexer.OperationCount.get -> long
 StackExchange.Redis.ConnectionMultiplexer.PreserveAsyncOrder.get -> bool
 StackExchange.Redis.ConnectionMultiplexer.PreserveAsyncOrder.set -> void
+StackExchange.Redis.ConnectionMultiplexer.Protocol.get -> string!
 StackExchange.Redis.ConnectionMultiplexer.PublishReconfigure(StackExchange.Redis.CommandFlags flags = StackExchange.Redis.CommandFlags.None) -> long
 StackExchange.Redis.ConnectionMultiplexer.PublishReconfigureAsync(StackExchange.Redis.CommandFlags flags = StackExchange.Redis.CommandFlags.None) -> System.Threading.Tasks.Task<long>!
 StackExchange.Redis.ConnectionMultiplexer.ReconfigureAsync(string! reason) -> System.Threading.Tasks.Task<bool>!
@@ -488,6 +491,7 @@ StackExchange.Redis.IConnectionMultiplexer.IsConnecting.get -> bool
 StackExchange.Redis.IConnectionMultiplexer.OperationCount.get -> long
 StackExchange.Redis.IConnectionMultiplexer.PreserveAsyncOrder.get -> bool
 StackExchange.Redis.IConnectionMultiplexer.PreserveAsyncOrder.set -> void
+StackExchange.Redis.IConnectionMultiplexer.Protocol.get -> string!
 StackExchange.Redis.IConnectionMultiplexer.PublishReconfigure(StackExchange.Redis.CommandFlags flags = StackExchange.Redis.CommandFlags.None) -> long
 StackExchange.Redis.IConnectionMultiplexer.PublishReconfigureAsync(StackExchange.Redis.CommandFlags flags = StackExchange.Redis.CommandFlags.None) -> System.Threading.Tasks.Task<long>!
 StackExchange.Redis.IConnectionMultiplexer.RegisterProfiler(System.Func<StackExchange.Redis.Profiling.ProfilingSession!>! profilingSessionProvider) -> void
@@ -1781,6 +1785,7 @@ virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.IncludeDetailIn
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.IncludePerformanceCountersInExceptions.get -> bool
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.IsMatch(System.Net.EndPoint! endpoint) -> bool
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.KeepAliveInterval.get -> System.TimeSpan
+virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.Protocol.get -> string!
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.Proxy.get -> StackExchange.Redis.Proxy
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.ReconnectRetryPolicy.get -> StackExchange.Redis.IReconnectRetryPolicy?
 virtual StackExchange.Redis.Configuration.DefaultOptionsProvider.ResolveDns.get -> bool

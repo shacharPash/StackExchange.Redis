@@ -931,6 +931,14 @@ namespace StackExchange.Redis
                 }
             }
 
+            if (Multiplexer.Protocol == "3")
+            {
+                log?.WriteLine($"{Format.ToString(this)}: Setting RESP protocol to RESP {Multiplexer.Protocol}");
+                msg = Message.Create(-1, CommandFlags.FireAndForget, RedisCommand.HELLO, (RedisValue)Multiplexer.Protocol);
+                msg.SetInternalCall();
+                await WriteDirectOrQueueFireAndForgetAsync(connection, msg, ResultProcessor.DemandOK).ForAwait();
+            }
+
             var bridge = connection.BridgeCouldBeNull;
             if (bridge == null)
             {
